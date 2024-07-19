@@ -1,13 +1,23 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    navigate("/home");
+    const email = event.target.tbemail.value;
+    const password = event.target.tbpassword.value;
+
+    try {
+      const res = await axios.post('http://localhost:8080/api/users/login', { email, password });
+      console.log(res.data);
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      // Handle error (e.g., show error message to the user)
+    }
   };
 
   return (
@@ -45,7 +55,9 @@ function Login() {
                 <input
                   type="email"
                   id="tbemail"
+                  name="tbemail"
                   placeholder="Enter Your Email"
+                  required
                 />
               </td>
             </tr>
@@ -57,7 +69,9 @@ function Login() {
                 <input
                   type="password"
                   id="tbpassword"
+                  name="tbpassword"
                   placeholder="Enter Your password"
+                  required
                 />
               </td>
             </tr>
